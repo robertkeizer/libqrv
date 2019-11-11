@@ -1,0 +1,17 @@
+{
+  "name": "libqrv",
+  "version": "0.0.1",
+  "description": "Library For QR Encoding Information in an Video Stream",
+  "main": "lib/index.js",
+  "repository": "git@github.com:robertkeizer/libqrv.git",
+  "author": "Robert Keizer <robert@keizer.ca>",
+  "license": "MIT",
+  "private": true,
+  "devDependencies": {
+    "assert": "^2.0.0",
+    "mocha": "^6.2.2"
+  },
+  "scripts": {
+    "test": "./node_modules/mocha/bin/mocha"
+  }
+}
