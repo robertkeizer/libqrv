@@ -1,8 +1,10 @@
+const fs	= require( "fs" );
 const events	= require( "events" );
 
 const LibQRV = require( "../lib/index" );
 
-const assert = require( "assert" );
+const async	= require( "async" );
+const assert	= require( "assert" );
 
 describe( "Base", function( ){
 	it( "LibQRV is a function", function( ){
@@ -48,9 +50,10 @@ describe( "Base", function( ){
 
 			}, ( libQRV, cb ) => {
 
-				// TODO teardown of the libQRV instance
-				return cb( null );
-			}, cb );
+				// kill the instance and anything
+				// that is has created ( tmp dirs, etc )
+				libQRV.destroy( cb );
+			} ], cb );
 		} );
 	} );
 } );
