@@ -1,5 +1,6 @@
 const fs	= require( "fs" );
 const events	= require( "events" );
+const path	= require( "path" );
 
 const LibQRV = require( "../lib/index" );
 
@@ -42,7 +43,7 @@ describe( "Base", function( ){
 					return cb( null, libQRV );
 				} );
 
-				const _readStream = fs.createReadStream( "./base.js" );
+				const _readStream = fs.createReadStream( path.join( __dirname, "../", "yarn.lock" ) );
 
 				libQRV.queueReadableStream( _readStream, ( err ) => {
 					if( err ){ return cb( err ); }
