@@ -14,7 +14,7 @@ describe( "Base", function( ){
 
 	describe( "Validations", function( ){
 		it( "Fails if an invalid config is passed in", function( cb ){
-			const z = new LibQRV( { "foo": "bar" }, ( err ) => {
+			new LibQRV( { "foo": "bar" }, ( err, inst ) => {
 				if( !err ){ return cb( "No error" ); }
 				return cb( null );
 			} );
@@ -28,19 +28,24 @@ describe( "Base", function( ){
 
 				assert.ok( libQRV instanceof LibQRV );
 
-				return cb( null );
+				libQRV.destroy( cb );
 			} );
 		} );
 
-		it( "Emits debug events if enabled", function( cb ){
+		it( "Emits a 'readableStreamComplete' event when finished encoding a readable stream.", function( cb ){
 
 			async.waterfall( [ ( cb ) => {
 				new LibQRV( {
 					debug: true
 				}, cb );
 			}, ( libQRV, cb ) => {
-				libQRV.once( "debug", ( what ) => {
-					return cb( null, libQRV );
+
+				libQRV.on( "debug", ( msg ) => {
+					console.log( msg );
+				} );
+
+				libQRV.once( "readableStreamComplete", ( details ) => {
+					return cb( null, details, libQRV );
 				} );
 
 				const _readStream = fs.createReadStream( path.join( __dirname, "../", "yarn.lock" ) );
@@ -49,11 +54,15 @@ describe( "Base", function( ){
 					if( err ){ return cb( err ); }
 				});
 
-			}, ( libQRV, cb ) => {
+			}, ( details, libQRV, cb ) => {
+
+				console.log( "I have details of " );
+				console.log( details );
 
 				// kill the instance and anything
 				// that is has created ( tmp dirs, etc )
 				libQRV.destroy( cb );
+
 			} ], cb );
 		} );
 	} );
