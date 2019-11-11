@@ -13,5 +13,10 @@
   },
   "scripts": {
     "test": "./node_modules/mocha/bin/mocha"
+  },
+  "dependencies": {
+    "async": "^3.1.0",
+    "joi": "^14.3.1",
+    "tmp": "^0.1.0"
   }
 }
