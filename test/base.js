@@ -20,19 +20,37 @@ describe( "Base", function( ){
 
 	describe( "Basic operation", function( ){
 		it( "Constructor returns sane object in callback", function( cb ){
-			const z = new LibQRV( { }, ( err, result ) => {
+			new LibQRV( { }, ( err, libQRV ) => {
 				if( err ){ return cb( err ); }
 
-				/*
-				{
-					inEmitter: $(eventEmitter),
-					done: $(function)
-				}
-				*/
-				assert.ok( typeof( result.done ) == "function" );
-				assert.ok( result.inEmitter instanceof events.EventEmitter );
+				assert.ok( libQRV instanceof LibQRV );
+
 				return cb( null );
 			} );
+		} );
+
+		it( "Emits debug events if enabled", function( cb ){
+
+			async.waterfall( [ ( cb ) => {
+				new LibQRV( {
+					debug: true
+				}, cb );
+			}, ( libQRV, cb ) => {
+				libQRV.once( "debug", ( what ) => {
+					return cb( null, libQRV );
+				} );
+
+				const _readStream = fs.createReadStream( "./base.js" );
+
+				libQRV.queueReadableStream( _readStream, ( err ) => {
+					if( err ){ return cb( err ); }
+				});
+
+			}, ( libQRV, cb ) => {
+
+				// TODO teardown of the libQRV instance
+				return cb( null );
+			}, cb );
 		} );
 	} );
 } );
