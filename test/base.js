@@ -2,7 +2,8 @@ const fs	= require( "fs" );
 const events	= require( "events" );
 const path	= require( "path" );
 
-const LibQRV = require( "../lib/index" );
+const LibQRV		= require( "../lib/index" ).LibQRV;
+const convertFile	= require( "../lib/index" ).convertFile;
 
 const async	= require( "async" );
 const assert	= require( "assert" );
@@ -41,7 +42,7 @@ describe( "Base", function( ){
 			}, ( libQRV, cb ) => {
 
 				libQRV.on( "debug", ( msg ) => {
-					console.log( msg );
+					//console.log( msg );
 				} );
 
 				libQRV.once( "readableStreamComplete", ( details ) => {
@@ -56,8 +57,11 @@ describe( "Base", function( ){
 
 			}, ( details, libQRV, cb ) => {
 
+				/*
 				console.log( "I have details of " );
 				console.log( details );
+				*/
+				
 
 				// kill the instance and anything
 				// that is has created ( tmp dirs, etc )
@@ -65,5 +69,53 @@ describe( "Base", function( ){
 
 			} ], cb );
 		} );
+	} );
+
+	describe( "convertFile operation", function( ){
+		it( "Works when we specify a filename", function( cb ){
+
+			const filePath = path.join( __dirname, "../yarn.lock" );
+			const destPath = path.join( __dirname, "../example-yarn.lock.mp4" );
+
+			convertFile( filePath, destPath, ( err ) => {
+				if( err ){ return cb( err ); }
+
+				fs.stat( destPath, ( err, stats ) => {
+					if( err ){ return cb( err ); }
+
+					if( !stats.isFile() ){
+						return cb( "Not a file" );
+					}
+
+					fs.unlink( destPath, ( err ) => {
+						if( err ){ return cb( err ); }
+						return cb( null );
+					} );
+				} );
+			} );
+		} );
+
+		it( "Works when we don't specify a filename", function( cb ){
+
+			const filePath = path.join( __dirname, "../yarn.lock" );
+
+			convertFile( filePath, ( err ) => {
+				if( err ){ return cb( err ); }
+
+				fs.stat( filePath + ".mp4", ( err, stats ) => {
+					if( err ){ return cb( err ); }
+
+					if( !stats.isFile() ){
+						return cb( "Not a file" );
+					}
+
+					fs.unlink( filePath + ".mp4", ( err ) => {
+						if( err ){ return cb( err ); }
+						return cb( null );
+					} );
+				} );
+			} );
+		} );
+
 	} );
 } );
