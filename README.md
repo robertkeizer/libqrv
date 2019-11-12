@@ -2,9 +2,7 @@
 
 `libqrv` is a node module that is used to encode data into video streams. Specifically it does this by transforming data into QR codes, and stitching the multiple frames together into a single video file.
 
-## Usage
-
-### Basic
+## Basic Usage
 
 **convertFile** - `convertFile( existingFile, [newFilePath, ] cb )`
 
@@ -40,9 +38,23 @@ convertFile( "./some/file.txt", ( err ) => {
 ```
 
 
-### Customized
+## Directly Using the Library
 
 The LibQRV library itself provides some customization. There are a lot of opportunities that exist to expose more configuration, and functionality.
+
+**Usage**
+```js
+const { LibQRV } = require( "libqrv" );
+
+const configToUse = {
+	debug: true
+};
+
+new LibQRV( configToUse, ( err, libqrv ) => {
+
+	// libqrv can be used here
+} );
+```
 
 **Default Options**
 ```
@@ -94,19 +106,6 @@ The LibQRV library itself provides some customization. There are a lot of opport
 
 **Constructor**
 LibQRV uses a configuration object that is passed into the constructor. Additionally, the constructor takes a callback that is called with `cb( err, instance )` where `err` should be `null`, and `instance` is the newly created instance of `LibQRV`. 
-
-```js
-const { LibQRV } = require( "libqrv" );
-
-const configToUse = {
-	debug: true
-};
-
-new LibQRV( configToUse, ( err, libqrv ) => {
-
-	// libqrv can be used here
-} );
-```
 
 ## Help Wanted
 If you find this module or repository useful, please consider making a pull request to it.
