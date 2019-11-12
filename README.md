@@ -2,9 +2,18 @@
 
 `libqrv` is a node module that is used to encode data into video streams. Specifically it does this by transforming data into QR codes, and stitching the multiple frames together into a single video file.
 
+## Installation
+
+```
+$ yarn install libqrv
+```
+
 ## Basic Usage
 
-**convertFile** - `convertFile( existingFile, [newFilePath, ] cb )`
+### convertFile
+`convertFile( existingFile [, newFilePath] , cb )`
+
+Converts a file into a mp4 video stream of QR codes that contain the `base64` encoded data. If `newFilePath` is not specified `.mp4` is added to the file path passed in.
 
 ```js
 const { convertFile } = require( "libqrv" );
@@ -46,13 +55,43 @@ The LibQRV library itself provides some customization. There are a lot of opport
 ```js
 const { LibQRV } = require( "libqrv" );
 
-const configToUse = {
+const config = {
 	debug: true
 };
 
-new LibQRV( configToUse, ( err, libqrv ) => {
+new LibQRV( config, ( err, libqrv ) => {
 
 	// libqrv can be used here
+
+	libqrv.on( "readableStreamComplete", ( details ) => {
+		/*
+		details = {
+			filename: "yarn.lock",
+			outputPath: "/var/folders/qr/z123...../T/tmp-..../yarn.lock.mp4"
+		}
+		*/
+
+
+		// Let's ensure that we clean up any resources
+		libqrv.destroy( ( err ) => {
+			if( err ){
+				console.log( "Couldn't clean up resources: " + err );
+				return;
+			}
+			console.log( "Cleaned up resources. Goodbye." );
+		} );
+	} );
+
+	libqrv.queueReadableStream( fs.createReadStream( "./yarn.lock" ), ( err ) => {
+		if( err ){
+			console.log( "Couldn't queue readable stream: " + err );
+			return;
+		}
+
+		// Readable stream has been queued.
+
+		// When complete "readableStreamComplete" will be emitted.
+	} );
 } );
 ```
 
@@ -108,6 +147,30 @@ new LibQRV( configToUse, ( err, libqrv ) => {
 LibQRV uses a configuration object that is passed into the constructor. Additionally, the constructor takes a callback that is called with `cb( err, instance )` where `err` should be `null`, and `instance` is the newly created instance of `LibQRV`. 
 
 ## Help Wanted
+
 If you find this module or repository useful, please consider making a pull request to it.
 
-As people start to utilize the module, more improvements will be made.
+### Running tests
+```
+$ yarn run test
+
+yarn run v1.3.2
+$ ./node_modules/mocha/bin/mocha -t 60000
+
+
+  Base
+    ✓ LibQRV is a function
+    Validations
+      ✓ Fails if an invalid config is passed in
+    Basic operation
+      ✓ Constructor returns sane object in callback
+      ✓ Emits a 'readableStreamComplete' event when finished encoding a readable stream. (8492ms)
+    convertFile operation
+      ✓ Works when we specify a filename (10250ms)
+      ✓ Works when we don't specify a filename (8534ms)
+
+
+  6 passing (27s)
+
+✨  Done in 28.27s.
+```
