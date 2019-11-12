@@ -1,14 +1,27 @@
-# libqrv
+## libqrv
 
-## Overview
-
-libQRV is a NodeJS module that is used to encode data into video streams. Specifically it does this by transforming data into QR codes, and stitching the multiple frames together into a single video file.
+`libqrv` is a node module that is used to encode data into video streams. Specifically it does this by transforming data into QR codes, and stitching the multiple frames together into a single video file.
 
 ## Usage
 
 ### Basic
 
 **convertFile** - `convertFile( existingFile, [newFilePath, ] cb )`
+
+```js
+const { convertFile } = require( "libqrv" );
+
+convertFile( "./some/file.txt", "./another/location/output.mp4", ( err ) => {
+
+	// err is null unless there is an error
+	if( err ){
+		return console.log( "Couldn't convert the file.. " + err );
+	}
+
+	// "./another/location/output.mp4" exists
+} );
+```
+
 ```js
 const { convertFile } = require( "libqrv" );
 
@@ -26,30 +39,27 @@ convertFile( "./some/file.txt", ( err ) => {
 } );
 ```
 
-```js
-const { convertFile } = require( "libqrv" );
 
-convertFile( "./some/file.txt", "./another/location/output.mp4", ( err ) => {
-
-	// err is null unless there is an error
-	if( err ){
-		return console.log( "Couldn't convert the file.. " + err );
-	}
-
-	// "./another/location/output.mp4" exists
-} );
-```
-
-### Advanced
+### Customized
 
 The LibQRV library itself provides some customization. There are a lot of opportunities that exist to expose more configuration, and functionality.
 
-**Configuration**
-| Configuration Name | Default Value | Description |
+**Options to constructor**
+
+| Option Name | Default Value | Description |
+| ------------------ | ------------- | ----------- |
 | `outputDirectory` | Dynamically Generated ( uses `tmp` ) | The directory where the output `.mp4` will be placed. |
 | `debug` | `false` | Whether or not to emit `debug` events |
-| `qr` | See QR Configuration | Configuration that relates to QR Code generation |
-| `video` | See Video Configuration | Configuration that relates to the video generation |
+| `qr` | See QR Options | Configuration that relates to QR Code generation |
+| `video` | See Video Options | Configuration that relates to the video generation |
+
+QR Options
+| Option Name | Default Value | Description |
+| ----------- | ------------- | ----------- |
+| width | 240 | The width of the QR code frame that is generated |
+| scale | 1 | The number of pixels that are used per "block" to make up the QR code |
+| margin | 0 | The amount of blank space that is kept around the QR code. Synonymous with HTML `padding` |
+| errorCorrectionLevel | "low" | How much error correction is used in the QR code. |
 
 **Constructor**
 LibQRV uses a configuration object that is passed into the constructor. Additionally, the constructor takes a callback that is called with `cb( err, instance )` where `err` should be `null`, and `instance` is the newly created instance of `LibQRV`. 
