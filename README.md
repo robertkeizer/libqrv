@@ -2,6 +2,8 @@
 
 `libqrv` is a node module that is used to encode data into video streams. Specifically it does this by transforming data into QR codes, and stitching the multiple frames together into a single video file.
 
+[![yarn.lock example qr code video](https://img.youtube.com/vi/la1eIuuQZ7M/0.jpg)](https://www.youtube.com/watch?v=la1eIuuQZ7M)
+
 ## Installation
 
 ```
