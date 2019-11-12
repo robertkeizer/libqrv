@@ -180,3 +180,6 @@ $ ./node_modules/mocha/bin/mocha -t 60000
 
 ✨  Done in 28.27s.
 ```
+
+## License
+MIT
