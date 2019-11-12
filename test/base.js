@@ -57,10 +57,8 @@ describe( "Base", function( ){
 
 			}, ( details, libQRV, cb ) => {
 
-				/*
 				console.log( "I have details of " );
 				console.log( details );
-				*/
 				
 
 				// kill the instance and anything
