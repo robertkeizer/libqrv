@@ -6,7 +6,6 @@
   "repository": "git@github.com:robertkeizer/libqrv.git",
   "author": "Robert Keizer <robert@keizer.ca>",
   "license": "MIT",
-  "private": true,
   "devDependencies": {
     "assert": "^2.0.0",
     "mocha": "^6.2.2"
