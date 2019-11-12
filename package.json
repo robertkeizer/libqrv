@@ -1,6 +1,6 @@
 {
   "name": "libqrv",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "description": "Library For QR Encoding Information in an Video Stream",
   "main": "lib/index.js",
   "repository": "git@github.com:robertkeizer/libqrv.git",
