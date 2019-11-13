@@ -10,7 +10,7 @@ jobs:
     steps:
     - uses: actions/checkout@v1
     - name: "Installs ffmpeg"
-      run: "apt install ffmpeg -y"
+      run: "sudo apt install ffmpeg -y"
     - uses: actions/setup-node@v1
       with:
         node-version: '10.x'
